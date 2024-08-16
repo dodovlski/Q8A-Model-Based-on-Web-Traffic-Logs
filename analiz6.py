@@ -4,7 +4,13 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 from scipy.sparse import hstack
 import faiss
+import torch
 from transformers import T5ForConditionalGeneration, T5Tokenizer
+from langchain.embeddings import OpenAIEmbeddings
+from langchain.vectorstores import FAISS
+from langchain.llms import HuggingFaceHub
+from langchain.chains import RetrievalQA 
+
 
 # CSV dosyasını okuma
 weblogs = pd.read_csv("logdata3.csv")
@@ -77,69 +83,19 @@ print("FAISS indeksi başarıyla kaydedildi.")
 # İsteğe bağlı: Kaydedilen indeksi test etme
 test_index = faiss.read_index("weblogs_index.faiss")
 print(f"Kaydedilen indeksteki vektör sayısı: {test_index.ntotal}")
+# LangChain ile FAISS vektör deposu oluşturma
+embeddings = OpenAIEmbeddings()
+vectorstore = FAISS.from_dataframe(weblogs, embedding=embeddings, index_name="weblogs_index")
 
-# Örnek bir sorgu yapma
-k = 5  # En yakın 5 sonucu al
-query_vector = vectors[0].reshape(1, -1)  # İlk vektörü sorgu olarak kullan
-distances, indices = test_index.search(query_vector, k)
+# T5 modeli ve tokenizer'ı yükleme (HuggingFaceHub ile)
+llm = HuggingFaceHub(repo_id="t5-small", model_kwargs={"temperature":0, "max_length":150})
+tokenizer = T5Tokenizer.from_pretrained("t5-small")
 
-print(f"\nEn yakın {k} sonuç:")
-for i, (d, idx) in enumerate(zip(distances[0], indices[0])):
-    print(f"{i+1}. Vektör indeksi: {idx}, Uzaklık: {d}")
-    
-    
-# FAISS indeksini yükleme
-index = faiss.read_index("weblogs_index.faiss")
+# RetrievalQA zinciri oluşturma
+qa_chain = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=vectorstore.as_retriever())
 
-# T5 modelini ve tokenizer'ı yükleme
-model_name = "t5-small"
-tokenizer = T5Tokenizer.from_pretrained(model_name)
-model = T5ForConditionalGeneration.from_pretrained(model_name)
-
-# TF-IDF vektörizeri yeniden oluşturma
-# Not: Gerçek uygulamada, bunu kaydetmiş ve yüklüyor olmalısınız
-tfidf = TfidfVectorizer(max_features=100)
-tfidf.fit(weblogs['URL'])
-
-def retrieve_relevant_logs(query, k=5):
-    # Sorguyu vektöre dönüştürme
-    query_tfidf = tfidf.transform([query]).toarray().astype('float32')
-    
-    # Sorgu vektörünü FAISS indeksindeki vektörlerle aynı boyuta getirme
-    query_vector = np.zeros((1, index.d), dtype='float32')
-    query_vector[:, :query_tfidf.shape[1]] = query_tfidf
-    
-    # FAISS ile en yakın k vektörü bulma
-    distances, indices = index.search(query_vector, k)
-    
-    # Bulunan indekslere karşılık gelen log kayıtlarını döndürme
-    relevant_logs = weblogs.iloc[indices[0]].to_dict('records')
-    return relevant_logs
-
-def generate_response(query, relevant_logs):
-    # Sorgu ve ilgili logları birleştirme
-    context = "Query: " + query + "\nRelevant logs:\n"
-    for log in relevant_logs:
-        context += f"IP: {log['IP']}, Method: {log['RequestMethod']}, URL: {log['URL']}, Status: {log['StatusCode']}, Size: {log['Size']}, Date: {log['Date']}, Time: {log['Time']}\n"
-    
-    # T5 modelini kullanarak yanıt oluşturma
-    input_ids = tokenizer.encode("summarize: " + context, return_tensors="pt", max_length=512, truncation=True)
-    output = model.generate(input_ids, max_length=150, num_return_sequences=1, no_repeat_ngram_size=2)
-    response = tokenizer.decode(output[0], skip_special_tokens=True)
-    
-    return response
-
-def rag_query(query):
-    # İlgili logları getirme
-    relevant_logs = retrieve_relevant_logs(query)
-    
-    # Yanıt oluşturma
-    response = generate_response(query, relevant_logs)
-    
-    return response
-
-# Test
-test_query = "What is the most recent request with a 500 status code?"
-result = rag_query(test_query)
-print(f"\nSoru: {test_query}")
-print(f"\nYanıt: {result}")
+# Sorgu yapma
+test_query = "Which URLs were accessed the least?"
+result = qa_chain.run(test_query)
+print(f"Soru: {test_query}")
+print(f"Yanıt: {result}")
