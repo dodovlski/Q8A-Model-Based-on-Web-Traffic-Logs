@@ -20,15 +20,18 @@ weblogs['Time'] = weblogs['Date&Time'].dt.time
 # Eski 'Date&Time' sütununu kaldır
 weblogs = weblogs.drop(columns=["Date&Time"])
 
-weblogs_checkpoint = weblogs
+# Check if 'IP' column exists
+if 'IP' not in weblogs.columns:
+    raise KeyError("'IP' column is missing from the DataFrame. Please check the input data.")
 
 # Kategorik verileri sayısallaştırma
-le = LabelEncoder()
-weblogs['IP_encoded'] = le.fit_transform(weblogs['IP'])
-weblogs['RequestMethod_encoded'] = le.fit_transform(weblogs['RequestMethod'])
+le_ip = LabelEncoder()
+weblogs['IP_encoded'] = le_ip.fit_transform(weblogs['IP'])
+le_method = LabelEncoder()
+weblogs['RequestMethod_encoded'] = le_method.fit_transform(weblogs['RequestMethod'])
 
 # URL'leri TF-IDF vektörlerine dönüştürme
-tfidf = TfidfVectorizer(max_features=100)  # max_features'ı veri setinize göre ayarlayın
+tfidf = TfidfVectorizer(max_features=100)
 url_vectors = tfidf.fit_transform(weblogs['URL'])
 
 # Sayısal verileri ölçeklendirme
@@ -37,7 +40,7 @@ numeric_features = ['StatusCode', 'Size']
 numeric_vectors = scaler.fit_transform(weblogs[numeric_features])
 
 # Tarih ve zaman verilerini sayısallaştırma
-weblogs['Date_numeric'] = pd.to_datetime(weblogs['Date']).astype('int64') // 10**9  # int64 dönüşümü
+weblogs['Date_numeric'] = pd.to_datetime(weblogs['Date']).astype('int64') // 10**9
 weblogs['Time_numeric'] = weblogs['Time'].apply(lambda x: x.hour * 3600 + x.minute * 60 + x.second)
 
 # Tüm vektörleri birleştirme
@@ -51,8 +54,6 @@ all_features = hstack([
 # Sonuç
 print("Vektör boyutu:", all_features.shape)
 print("Örnek vektör:", all_features[0].toarray())
-
-
 
 # Vektörleri numpy array'ine dönüştürme
 vectors = all_features.toarray().astype('float32')
@@ -74,20 +75,6 @@ faiss.write_index(index, "weblogs_index.faiss")
 
 print("FAISS indeksi başarıyla kaydedildi.")
 
-# İsteğe bağlı: Kaydedilen indeksi test etme
-test_index = faiss.read_index("weblogs_index.faiss")
-print(f"Kaydedilen indeksteki vektör sayısı: {test_index.ntotal}")
-
-# Örnek bir sorgu yapma
-k = 5  # En yakın 5 sonucu al
-query_vector = vectors[0].reshape(1, -1)  # İlk vektörü sorgu olarak kullan
-distances, indices = test_index.search(query_vector, k)
-
-print(f"\nEn yakın {k} sonuç:")
-for i, (d, idx) in enumerate(zip(distances[0], indices[0])):
-    print(f"{i+1}. Vektör indeksi: {idx}, Uzaklık: {d}")
-    
-    
 # FAISS indeksini yükleme
 index = faiss.read_index("weblogs_index.faiss")
 
@@ -97,22 +84,51 @@ tokenizer = T5Tokenizer.from_pretrained(model_name)
 model = T5ForConditionalGeneration.from_pretrained(model_name)
 
 # TF-IDF vektörizeri yeniden oluşturma
-# Not: Gerçek uygulamada, bunu kaydetmiş ve yüklüyor olmalısınız
 tfidf = TfidfVectorizer(max_features=100)
 tfidf.fit(weblogs['URL'])
 
-def retrieve_relevant_logs(query, k=5):
-    # Sorguyu vektöre dönüştürme
-    query_tfidf = tfidf.transform([query]).toarray().astype('float32')
+def parse_query(query):
+    # Basit bir sorgu ayrıştırıcı (daha gelişmiş bir NLP modeli ile değiştirilebilir)
+    query_lower = query.lower()
     
-    # Sorgu vektörünü FAISS indeksindeki vektörlerle aynı boyuta getirme
+    if 'most recent' in query_lower and 'status code' in query_lower:
+        try:
+            # Extract the status code safely
+            status_code_str = query_lower.split('status code')[-1].strip()
+            status_code = int(status_code_str)
+            return {
+                'type': 'recent_status',
+                'status_code': status_code
+            }
+        except ValueError:
+            # Handle the case where the status code is not a valid integer
+            print(f"Geçersiz durum kodu: {status_code_str}")
+            return None
+    
+    elif 'count' in query_lower:
+        if 'ip' in query_lower:
+            return {'type': 'count', 'field': 'IP'}
+        elif 'method' in query_lower:
+            return {'type': 'count', 'field': 'RequestMethod'}
+    
+    # Daha fazla sorgu türü ekleyin
+    return None
+
+def retrieve_relevant_logs(query, k=5):
+    query_info = parse_query(query)
+    
+    if query_info is None:
+        return [{"Error": "Query could not be parsed or contained invalid data."}]
+    
+    if query_info['type'] == 'recent_status':
+        relevant_logs = weblogs[weblogs['StatusCode'] == query_info['status_code']].sort_values(by='Date_numeric', ascending=False).head(k)
+        return relevant_logs.to_dict('records')
+    
+    # Default to FAISS search for other types of queries
+    query_tfidf = tfidf.transform([query]).toarray().astype('float32')
     query_vector = np.zeros((1, index.d), dtype='float32')
     query_vector[:, :query_tfidf.shape[1]] = query_tfidf
-    
-    # FAISS ile en yakın k vektörü bulma
     distances, indices = index.search(query_vector, k)
-    
-    # Bulunan indekslere karşılık gelen log kayıtlarını döndürme
     relevant_logs = weblogs.iloc[indices[0]].to_dict('records')
     return relevant_logs
 
@@ -120,7 +136,15 @@ def generate_response(query, relevant_logs):
     # Sorgu ve ilgili logları birleştirme
     context = "Query: " + query + "\nRelevant logs:\n"
     for log in relevant_logs:
-        context += f"IP: {log['IP']}, Method: {log['RequestMethod']}, URL: {log['URL']}, Status: {log['StatusCode']}, Size: {log['Size']}, Date: {log['Date']}, Time: {log['Time']}\n"
+        ip = log.get('IP', 'N/A')  # Use 'N/A' if 'IP' is missing
+        method = log.get('RequestMethod', 'N/A')
+        url = log.get('URL', 'N/A')
+        status = log.get('StatusCode', 'N/A')
+        size = log.get('Size', 'N/A')
+        date = log.get('Date', 'N/A')
+        time = log.get('Time', 'N/A')
+        
+        context += f"IP: {ip}, Method: {method}, URL: {url}, Status: {status}, Size: {size}, Date: {date}, Time: {time}\n"
     
     # T5 modelini kullanarak yanıt oluşturma
     input_ids = tokenizer.encode("summarize: " + context, return_tensors="pt", max_length=512, truncation=True)
@@ -129,17 +153,20 @@ def generate_response(query, relevant_logs):
     
     return response
 
+
 def rag_query(query):
-    # İlgili logları getirme
     relevant_logs = retrieve_relevant_logs(query)
-    
-    # Yanıt oluşturma
     response = generate_response(query, relevant_logs)
-    
     return response
 
 # Test
-test_query = "What URLs were accessed on March 15, 2021, at 15:30?"
+test_query = "What is the most recent request with a 500 status code?"
 result = rag_query(test_query)
 print(f"\nSoru: {test_query}")
 print(f"\nYanıt: {result}")
+
+# Daha fazla test
+test_query_2 = "How many requests were made from each IP?"
+result_2 = rag_query(test_query_2)
+print(f"\nSoru: {test_query_2}")
+print(f"\nYanıt: {result_2}")
