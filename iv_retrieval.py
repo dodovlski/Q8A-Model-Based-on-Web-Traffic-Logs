@@ -1,5 +1,4 @@
 import faiss
-import pandas as pd
 
 def load_faiss_index(index_file='cleaned_data_faiss.index'):
     index = faiss.read_index(index_file)

@@ -1,6 +1,6 @@
-from 1_vectorization import create_faiss_index
-from 2_retrieval import load_faiss_index, retrieve_documents
-from 3_generation import generate_answer
+from iii_vectorization import create_faiss_index
+from iv_retrieval import load_faiss_index, retrieve_documents
+from ivv_generation import generate_answer
 import pandas as pd
 
 def answer_question(query):
