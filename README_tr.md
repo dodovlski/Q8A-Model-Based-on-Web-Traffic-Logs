@@ -75,4 +75,4 @@ Gelecekte, sistemin daha geniş veri kaynakları ile entegre edilmesi ve bir kul
 Bu proje, web log verilerine dayalı olarak bir soru-cevap sistemi geliştirmenin mümkün olduğunu göstermiştir. Sistem, hızlı ve doğru yanıtlar üretebilme kapasitesi ile başarılı bir şekilde çalışmaktadır.
 
 ### 🧠 Elde edilen kazanımlar ve öğrenilen dersler
-Proje, büyük veri setleri ile çalışmanın zorluklarını ve bu tür verilerden anlamlı bilgi çıkarma süreçlerini anlamaya yardımcı olmuştur. Ayrıca, yap
+Proje, büyük veri kümeleriyle çalışmanın zorluklarına ve bu tür verilerden anlamlı bilgilerin çıkarılmasına ilişkin süreçlere ilişkin bilgiler sağladı. Ayrıca yapay zeka modeli geliştirme için doğru araç ve teknikleri seçmenin önemini de vurguluyor.
