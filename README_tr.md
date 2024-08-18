@@ -41,24 +41,28 @@ Geliştirme sürecinde Python, Pandas, Scikit-learn, FAISS ve Hugging Face Trans
 ### ⚙️ Sistemin işleyişi
 Sistem, kullanıcıdan gelen sorguya en uygun yanıtı vermek üzere tasarlanmıştır. Kullanıcı sorgusu, sistem tarafından önce TF-IDF ve FAISS kullanılarak en alakalı log girişleri ile eşleştirilir. Ardından, bu veriler T5 modeline aktarılır ve model, kullanıcının sorusuna yanıt üretir.
 
-### 🖥️ Arayüz tasarımı (varsa)
+### 🖥️ Arayüz tasarımı
 Bu proje için herhangi bir kullanıcı arayüzü tasarlanmamıştır. Sistem komut satırı üzerinden çalıştırılmakta ve sonuçlar yine bu arayüzde gösterilmektedir.
 
 ### 📋 Örnek sorgular ve sistem yanıtları
 Örnek bir sorgu olarak, "Sunucu ne zaman hata verdi?" sorusu verildiğinde, sistem ilgili log verilerini tarar ve en uygun yanıtı üretir. Örneğin, "Sunucu, 2023-06-15 tarihinde 500 hata kodu ile bir hata verdi" gibi bir yanıt üretilebilir.
 
 ![Example Query](images/orneksorgu.png)
+![Example Query](images/orneksorgu2.png)
 
 ## 📊 Sonuçlar ve Değerlendirme
 
 ### 🏅 Sistemin performans metrikleri
-Sistem, doğruluk ve hız gibi metrikler üzerinden değerlendirildiğinde, kullanıcı sorgularına hızlı ve doğru yanıtlar üretebilme kapasitesine sahiptir. Özellikle FAISS kullanımı, büyük veri setlerinde hızlı arama yapabilmeyi sağlamaktadır.
+Sistem, doğruluk ve hız gibi metrikler üzerinden değerlendirildiğinde, kullanıcı sorgularına hızlı ve doğru yanıtlar üretebilme kapasitesine sahiptir.Ancak doğal dil ile cevap verme konusunda yetersiz olduğu görülmüştür. Özellikle FAISS kullanımı, büyük veri setlerinde hızlı arama yapabilmeyi sağlamaktadır.
 
 ### ⏱️ Doğruluk ve yanıt hızı analizleri
-Yapılan testlerde, sistemin doğruluk oranı %90'ın üzerinde bulunmuş ve ortalama yanıt süresi 200 ms civarında ölçülmüştür. Bu sonuçlar, sistemin verimli ve etkili çalıştığını göstermektedir.
+Yapılan testlerde, sistemin doğruluk oranı %90'ın üzerinde bulunmuş ve ortalama yanıt süresi 620 ms civarında ölçülmüştür. Bu sonuçlar, sistemin verimli ve etkili çalıştığını göstermektedir.
 
-### 😊 Kullanıcı deneyimi değerlendirmesi (varsa)
-Projenin komut satırı tabanlı olması, kullanıcı deneyimi açısından bazı sınırlamalar getirmektedir. Ancak, sistemin hızlı ve doğru yanıtlar vermesi, kullanıcı deneyimini olumlu yönde etkilemektedir.
+![Example Query](images/elapsedTime.png)
+![Example Query](images/elapsedTime2.png)
+
+### 😊 Kullanıcı deneyimi değerlendirmesi
+Projenin komut satırı tabanlı olması, kullanıcı deneyimi açısından bazı sınırlamalar getirmektedir. Ancak, sistemin hızlı ve doğru yanıtlar vermesi, kullanıcı deneyimini olumlu yönde etkilemektedir. Sistem gelişmiş bir seviyeye getirildiğinde arayüz geliştirilip kullanıcı dostu olması sağlanabilir.
 
 ## 💬 Tartışma
 
