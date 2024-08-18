@@ -26,7 +26,7 @@
 6. [💬 Tartışma](#-tartışma)
    - [👍 Projenin Güçlü Yönleri ve Kısıtlamaları](#-projenin-güçlü-yönleri-ve-kısıtlamaları)
    - [🚧 Karşılaşılan Zorluklar ve Çözüm Yöntemleri](#-karşılaşılan-zorluklar-ve-çözüm-yöntemleri)
-   - [🔮 Gelecekteki Geliştirme Önerileri](#-gelecekteki-geliştirme-önerileri)
+   - [🛠️ İyileştirme Önerileri](#-iyilestirme-önerileri)
 7. [🏁 Sonuç](#-sonuç)
    - [📈 Projenin Genel Değerlendirmesi](#-projenin-genel-değerlendirmesi)
    - [🧠 Kazanımlarım (Kişisel)](#-kazanımlarım-kişisel)
@@ -130,8 +130,26 @@ Projenin güçlü yönleri arasında hızlı veri işleme, doğru yanıt üretme
    - "TypeError: Converting from datetime64[ns] to int32 is not supported. Do obj.astype('int64').astype(dtype) instead" hatası veri temizleme sırasında ortaya çıkmıştır.
    - **Çözüm:** datetime64[ns] veri tipini önce int64 veri tipine, ardından istenen int32 veri tipine dönüştürerek sorun çözülmüştür.
 
-### 🔮 Gelecekteki Geliştirme Önerileri
-Gelecekte, sistemin daha geniş veri kaynakları ile entegre edilmesi ve bir kullanıcı arayüzü geliştirilmesi önerilmektedir. Ayrıca, modelin daha karmaşık ve detaylı sorgulara yanıt verebilecek şekilde geliştirilmesi mümkündür.
+## 🛠️ İyileştirme Önerileri
+
+### 🔍 Vektörizasyon ve Arama Performansı
+
+- **TF-IDF vektörizasyonu**: Bazı durumlarda daha derin ve anlamlı vektör temsilleriyle geliştirilebilir. 
+  - Örneğin, daha gelişmiş gömme teknikleri veya BERT gibi dil modelleri kullanılabilir.
+- **FAISS indeksinin performansı**: Artırılabilir. 
+  - Özellikle, daha büyük veri kümeleri ile çalışırken, çeşitli FAISS yapılandırmaları ve optimizasyon teknikleri değerlendirilebilir.
+
+### 🧠 Cevap Kalitesi
+
+- **Model eğitimi**: Cevapların kalitesini artırmak için modelin eğitimi üzerinde çalışılabilir. 
+  - T5 modelinin hiperparametreleri ve eğitim verisi üzerinde ince ayar yapılması, daha doğru ve anlamlı yanıtların üretilmesine yardımcı olabilir.
+- **Veri setleri**: Modelin yanıt verme yeteneğini geliştirmek için daha geniş ve çeşitli veri setleri ile eğitilmesi önerilmektedir.
+
+### 🖥️ Kullanıcı Deneyimi
+
+- **Sistem tasarımı**: Kullanıcıların sorgu oluşturma şekillerine daha iyi uyum sağlayacak şekilde tasarlanabilir. 
+  - Örneğin, kullanıcı dostu arayüzler veya daha iyi hata yönetimi mekanizmaları eklenebilir.
+- **Kullanıcı geri bildirimi**: Yanıtların doğruluğunu değerlendirmek için kullanıcı geri bildirim mekanizmaları entegre edilebilir.
 
 ## 🏁 Sonuç
 
