@@ -33,8 +33,21 @@ Projede, TF-IDF vektörleştirme yöntemi ve FAISS (Facebook AI Similarity Searc
 ### 🏗️ Sistem mimarisi ve bileşenleri
 Sistem, veri işleme, model eğitimi ve sorgu yanıtlama olmak üzere üç ana bileşenden oluşmaktadır. Veri işleme aşamasında, web logları işlenmiş ve temizlenmiştir. Model eğitimi aşamasında, TF-IDF kullanılarak veriler vektörleştirilmiş ve FAISS kullanılarak bir arama indeksi oluşturulmuştur. Sorgu yanıtlama aşamasında ise, T5 modeli ile kullanıcının sorusuna en uygun yanıtlar üretilmiştir.
 
-### 🛠️ Geliştirme süreci ve kullanılan araçlar
-Geliştirme sürecinde Python, Pandas, Scikit-learn, FAISS ve Hugging Face Transformer kütüphaneleri kullanılmıştır. Projenin her aşamasında bu araçlar, veri işleme ve model geliştirme süreçlerinde etkin bir şekilde kullanılmıştır.
+### 🛠️ Geliştirme Süreci ve Kullanılan Araçlar
+
+Geliştirme sürecinde aşağıdaki kütüphaneler ve araçlar kullanılmıştır:
+
+- **Random:** Rastgele sayı ve veri seçimi işlemleri için kullanıldı. Log verilerinin simülasyonunda rastgele veri üretmek için önemli bir rol oynadı.
+- **Time:** Zaman ve tarih işlemlerinde kullanıldı. Özellikle log verilerindeki zaman damgalarını oluşturmak ve işlemek için kullanıldı.
+- **Faker:** Gerçekçi fakat sahte veri üretmek için kullanıldı. IP adresleri, tarih ve saat gibi log verilerinin sahte fakat mantıklı bir şekilde oluşturulması için kullanıldı.
+- **OS:** İşletim sistemi ile ilgili işlemleri gerçekleştirmek için kullanıldı. Özellikle dosya yolunu ayarlamak ve dosya işlemlerini yönetmek için kullanıldı.
+- **RE (Regular Expressions):** Metin verilerini işlemek ve gerekli bilgileri log satırlarından çıkarmak için kullanıldı. Düzenli ifadelerle log dosyalarındaki belirli desenleri yakalamak için kullanıldı.
+- **Pandas:** Veri işleme ve analizinde kullanıldı. Log verilerini tablo formatında düzenlemek, işlemek ve CSV formatında kaydetmek için kullanıldı.
+- **Scikit-learn:** Makine öğrenimi algoritmaları ve vektörleştirme işlemleri için kullanıldı. TF-IDF vektörleştirme işlemi ve model eğitiminde etkin bir şekilde kullanıldı.
+- **FAISS:** Yüksek boyutlu veriler üzerinde hızlı benzerlik aramaları yapmak için kullanıldı. Log verileri arasında en uygun cevapları hızlı bir şekilde bulmak için kullanıldı.
+- **TfidfVectorizer:** Metin verilerini sayısal vektörlere dönüştürmek için kullanıldı. Log içeriklerini vektörleştirmek ve benzerlik bazlı aramalar yapmak için kullanıldı.
+- **Transformers:** Doğal dil işleme (NLP) modelleri için kullanıldı. T5 modelini kullanarak sorulara cevap üretmek amacıyla kullanıldı.
+
 
 ## 🚀 Uygulama
 
