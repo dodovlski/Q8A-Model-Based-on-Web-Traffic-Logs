@@ -47,6 +47,8 @@ Bu proje için herhangi bir kullanıcı arayüzü tasarlanmamıştır. Sistem ko
 ### 📋 Örnek sorgular ve sistem yanıtları
 Örnek bir sorgu olarak, "Sunucu ne zaman hata verdi?" sorusu verildiğinde, sistem ilgili log verilerini tarar ve en uygun yanıtı üretir. Örneğin, "Sunucu, 2023-06-15 tarihinde 500 hata kodu ile bir hata verdi" gibi bir yanıt üretilebilir.
 
+![Example Query](images/orneksorgu.png)
+
 ## 📊 Sonuçlar ve Değerlendirme
 
 ### 🏅 Sistemin performans metrikleri
