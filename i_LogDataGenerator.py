@@ -10,6 +10,7 @@ from random import  choice
 import time
 import faker
 import os
+
 os.environ['TZ'] = 'Europe/Istanbul'
 fak = faker.Faker()
 

@@ -82,8 +82,23 @@ Projenin komut satırı tabanlı olması, kullanıcı deneyimi açısından baz�
 ### 👍 Projenin güçlü yönleri ve kısıtlamaları
 Projenin güçlü yönleri arasında hızlı veri işleme, doğru yanıt üretme ve genişletilebilir bir mimariye sahip olması bulunmaktadır. Ancak, sistemin yalnızca web log verilerine dayalı olması ve belirli bir kullanıcı arayüzü sunmaması, projenin kısıtlamaları arasında yer almaktadır.
 
-### 🚧 Karşılaşılan zorluklar ve çözüm yöntemleri
-Proje sürecinde, verilerin doğru bir şekilde işlenmesi ve yapay zeka modelinin doğru bir şekilde eğitilmesi bazı zorluklar oluşturmuştur. Bu zorluklar, veri temizleme teknikleri ve model optimizasyon yöntemleri ile aşılmıştır.
+### 🚧 Karşılaşılan Zorluklar ve Çözüm Yöntemleri
+
+1. **Veri İşleme Zorlukları:**
+   - Verilerin doğru bir şekilde işlenmesi ve uygun formatta düzenlenmesi zor olmuştur.
+   - **Çözüm:** Veri temizleme teknikleri kullanılarak eksik ve hatalı veriler düzeltilmiş ve veriler uygun formatlara dönüştürülmüştür.
+
+2. **Yapay Zeka Modeli Eğitimi:**
+   - Yapay zeka modelinin doğru bir şekilde eğitilmesi bazı zorluklar yaratmıştır.
+   - **Çözüm:** Model optimizasyon yöntemleri uygulanmış, hiperparametre ayarlamaları yapılmış ve modelin performansı artırılmıştır.
+
+3. **FAISS Veri Tipi Uyumsuzluğu:**
+   - FAISS genellikle `float32` veri tipiyle çalışır, bu nedenle `all_vectors` dizisinin doğru veri tipinde olması önemlidir.
+   - **Çözüm:** `all_vectors` dizisi `float32` veri tipine dönüştürülmüş ve FAISS ile uyumlu hale getirilmiştir.
+
+4. **Datetime64[ns] ile int32 Dönüşüm Hatası:**
+   - "TypeError: Converting from datetime64[ns] to int32 is not supported. Do obj.astype('int64').astype(dtype) instead" hatası veri temizleme sırasında ortaya çıkmıştır.
+   - **Çözüm:** `datetime64[ns]` veri tipini önce `int64` veri tipine, ardından istenen `int32` veri tipine dönüştürerek sorun çözülmüştür.
 
 ### 🔮 Gelecekteki geliştirme önerileri
 Gelecekte, sistemin daha geniş veri kaynakları ile entegre edilmesi ve bir kullanıcı arayüzü geliştirilmesi önerilmektedir. Ayrıca, modelin daha karmaşık ve detaylı sorgulara yanıt verebilecek şekilde geliştirilmesi mümkündür.
@@ -93,5 +108,13 @@ Gelecekte, sistemin daha geniş veri kaynakları ile entegre edilmesi ve bir kul
 ### 📈 Projenin genel değerlendirmesi
 Bu proje, web log verilerine dayalı olarak bir soru-cevap sistemi geliştirmenin mümkün olduğunu göstermiştir. Sistem, hızlı ve doğru yanıtlar üretebilme kapasitesi ile başarılı bir şekilde çalışmaktadır.
 
-### 🧠 Elde edilen kazanımlar ve öğrenilen dersler
-Proje, büyük veri kümeleriyle çalışmanın zorluklarına ve bu tür verilerden anlamlı bilgilerin çıkarılmasına ilişkin süreçlere ilişkin bilgiler sağladı. Ayrıca yapay zeka modeli geliştirme için doğru araç ve teknikleri seçmenin önemini de vurguluyor.
+### 🧠 Kazanımlarım (KİŞİSEL)
+
+- **Web Trafik Logları:** Web trafik loglarının ne olduğunu öğrendim ve bu logların yapay zeka destekli soru-cevap sistemi için nasıl kullanılacağını anladım.
+- **Veri Temizleme Yöntemleri:** Web log verilerini temizlemek için hangi yöntemlerin kullanılacağını ve hangi dosya formatlarının daha uygun olduğunu öğrendim.
+- **Vektörleştirme:** Soru-cevap sistemleri için kelimelerin vektörize edilmesi gerektiğini öğrendim.
+- **Vektör Veri Tabanı:** Vektörlerin hızlıca kullanılabilmesi için vektör veri tabanına aktarılması gerektiğini öğrendim.
+- **RAG Modeli:** Kullanıcıya doğru ve uygun yanıtlar verebilmek için Retrieval-Augmented Generation (RAG) modelinin nasıl kullanılacağını öğrendim.
+- **Bilgi Alımı ve Cevap Üretme:** RAG modeli kullanarak bilgi alımı ve cevap üretme süreçlerini öğrendim.
+- **Teknoloji Kullanımı:** Hangi teknolojilerin spesifik olarak hangi durumlarda kullanılacağı konusunda fikir sahibi oldum.
+
