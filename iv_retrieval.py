@@ -1,6 +1,6 @@
 import faiss
 
-def load_faiss_index(index_file='cleaned_data_faiss.index'):
+def load_faiss_index(index_file='data/cleaned_data_faiss.index'):
     index = faiss.read_index(index_file)
     return index
 

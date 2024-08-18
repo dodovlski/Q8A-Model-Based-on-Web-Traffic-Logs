@@ -38,7 +38,7 @@ dictionary = {'request': ['GET', 'POST', 'PUT', 'DELETE'],
                       'Mozilla/5.0 (iPhone; CPU iPhone OS 12_4_9 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1.2 Mobile/15E148 Safari/604.1'],
               }
 
-f = open("weblogdata.log","w")
+f = open("data/weblogdata.log","w")
 for _ in range(1,100):
     f.write('%s - - [%s] "%s %s HTTP/1.0" %s %s "-" "%s" %s\n' % 
         (fak.ipv4(),

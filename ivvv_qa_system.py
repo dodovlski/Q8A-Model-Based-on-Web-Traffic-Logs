@@ -4,8 +4,8 @@ from ivv_generation import generate_answer
 import pandas as pd
 
 def answer_question(query):
-    data_file = 'cleaned_data.csv'
-    index_file = 'cleaned_data_faiss.index'
+    data_file = 'data/cleaned_data.csv'
+    index_file = 'data/cleaned_data_faiss.index'
     
     vectorizer = create_faiss_index(data_file, index_file)
     index = load_faiss_index(index_file)

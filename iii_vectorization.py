@@ -2,7 +2,7 @@ import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 import faiss
 
-def create_faiss_index(file_path='cleaned_data.csv', index_file='cleaned_data_faiss.index'):
+def create_faiss_index(file_path='data/cleaned_data.csv', index_file='data/cleaned_data_faiss.index'):
     log_data = pd.read_csv(file_path)
     vectorizer = TfidfVectorizer()
     tfidf_vectors = vectorizer.fit_transform(log_data['LOG_CONTENT'])
