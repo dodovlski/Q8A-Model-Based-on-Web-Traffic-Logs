@@ -17,4 +17,5 @@ def answer_question(query):
     context = " ".join(retrieved_docs)
     
     answer = generate_answer(query, context)
+    
     return answer

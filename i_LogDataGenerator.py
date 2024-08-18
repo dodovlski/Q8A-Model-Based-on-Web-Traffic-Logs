@@ -1,10 +1,14 @@
-from datetime import date
+
+
+#
+# Log Samples were generated in Apache Web Traffic Logs format
+#
+
+
 import random
-from random import randint, choice
-import sys
+from random import  choice
 import time
 import faker
-from datetime import datetime
 import os
 os.environ['TZ'] = 'Europe/Istanbul'
 fak = faker.Faker()
