@@ -26,7 +26,7 @@
 6. [💬 Tartışma](#-tartışma)
    - [👍 Projenin Güçlü Yönleri ve Kısıtlamaları](#-projenin-güçlü-yönleri-ve-kısıtlamaları)
    - [🚧 Karşılaşılan Zorluklar ve Çözüm Yöntemleri](#-karşılaşılan-zorluklar-ve-çözüm-yöntemleri)
-   - [🛠️ İyileştirme Önerileri](#-iyileştirme-önerileri)
+   - [🛠️ Iyileştirme Önerileri](#-iyileştirme-önerileri)
 7. [🏁 Sonuç](#-sonuç)
    - [📈 Projenin Genel Değerlendirmesi](#-projenin-genel-değerlendirmesi)
    - [🧠 Kazanımlarım (Kişisel)](#-kazanımlarım-kişisel)
